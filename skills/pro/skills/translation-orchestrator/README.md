@@ -1,10 +1,10 @@
 # 外文讲义翻译 Skill
 
-> 套件文档版本：V4.0.0；编排 Skill 的元数据版本：3.3.0。
+> 套件文档版本：V4.0.1；编排 Skill 的元数据版本：3.3.0。
 
 将英语、法语等外文学案整理为准确、易读的中文学习材料，保留章节、术语、公式、表格和练习结构，并导出用户选择的格式。
 
-本项目包含十一个同级、可独立发现的 Agent Skills。`translation-orchestrator` 是编排入口，同时集中保存共享脚本、词库、模板和大部分依赖；十个执行 Skill 按需完成短线/长线翻译、PDF/PPTX 读取、共享图示讲解、测验、解析、格式发布和质量审计。各平台的安装目录、加载入口和工具权限不同。
+本项目包含十一个同级、可独立发现的 Agent Skills。`translation-orchestrator` 是编排入口，同时集中保存共享脚本、Wikidata 在线术语查询工具、模板和大部分依赖；十个执行 Skill 按需完成短线/长线翻译、PDF/PPTX 读取、共享图示讲解、测验、解析、格式发布和质量审计。各平台的安装目录、加载入口和工具权限不同。
 
 ## 强制 Skill 使用声明
 
@@ -17,7 +17,7 @@
 - 输入：PDF、DOCX、PPTX、TXT。PDF/PPTX 页面逐页渲染；当前模型支持图像输入且宿主能把页图像素交给它时必须逐页视觉核对，OCR 仅作辅助。能力以当前会话的宿主/模型组合为准，不根据模型品牌/型号、文件路径、OCR 或文字描述推断。若当前模型明确不支持图像输入或宿主没有实际传图通道，Reader 记录 `SKIPPED_NO_VISION`，只继续处理可提取文本，并在成品列出未审核页。
 - 输出：HTML、DOCX、Markdown。
 - 配图：PDF/PPTX 的图片由 Reader 逐页核对后选择导出；PDF 图片从页渲染图裁切。译稿标注页码，信息密集页按需生成图示说明。`SKIPPED_NO_VISION` 时不导出图片或图示说明。
-- 术语：可检索随包词库，也可由模型结合上下文确定译名。
+- 术语：默认通过 Wikidata 公开 API 查询多语种标签作为候选，也可由模型结合上下文确定译名。结构化数据采用 CC0 1.0。查询只发送单个术语或短语，不发送整份讲义；候选并非学科规范词典。用户选择 `ai_auto` 时不调用外部 API。
 
 ## 安装
 
@@ -61,7 +61,7 @@ PPTX 页面渲染还需要在系统中安装 LibreOffice；PDF 由 pypdfium2 直
 | 概念表 | `true`（生成）或 `false`（不生成） |
 | 中文注释 | `无注释`、`轻度注释`、`高中生视角`、`重度注释` |
 | 提取源文件配图 | `true` 或 `false` |
-| 术语策略 | `system_glossary`（使用随包词库）或 `ai_auto`（模型识别术语） |
+| 术语策略 | `wikidata`（在线查询候选）或 `ai_auto`（模型结合上下文识别） |
 | 章末测验 | `无测验`、`基础`、`中档`、`高难`，可多选 |
 
 选择任意测验难度后，还会单独询问测验语言：`双语`、`学案所属语言` 或 `中文`；选择“学案所属语言”时，会使用当前讲义识别出的主要源语言。
@@ -69,7 +69,7 @@ PPTX 页面渲染还需要在系统中安装 LibreOffice；PDF 由 pypdfium2 直
 示例：
 
 ```text
-请翻译这份法语热力学讲义。学科选 Science，输出 HTML 和 DOCX，使用 concept_highlight，生成概念表，采用高中生视角注释，提取 PDF 配图，并使用随包词库。
+请翻译这份法语热力学讲义。学科选 Science，输出 HTML 和 DOCX，使用 concept_highlight，生成概念表，采用高中生视角注释，提取 PDF 配图，并通过 Wikidata 查询必要术语。
 ```
 
 ## 输出位置
@@ -81,8 +81,7 @@ PPTX 页面渲染还需要在系统中安装 LibreOffice；PDF 由 pypdfium2 直
 - `SKILL.md`：编排入口，收集设置并按需路由子 Skill。
 - `references/task-handoff.md`：编排器与子 Skill 共用的任务清单和产物交接契约。
 - `skill.yaml`：编排入口的可选参数扩展；它不是 Agent Skills 标准字段，只有明确支持该扩展的调用器才会读取。
-- `scripts/`：文本提取、术语检索、图片提取和 HTML / DOCX / Markdown 构建器。
-- `glossaries/`：七个学科目录中的 CSV 术语表。
+- `scripts/`：文本提取、Wikidata 术语查询、图片提取和 HTML / DOCX / Markdown 构建器。
 - `templates/`：HTML 样式。
 - 同级其他十个 Skill 目录：各自的 SKILL.md 和专属工作规则；见[套件索引](../README.md)。
 - `docs/usage_guide.md`：参数说明、使用流程和故障排查。
@@ -95,4 +94,4 @@ PPTX 页面渲染还需要在系统中安装 LibreOffice；PDF 由 pypdfium2 直
 
 ## 许可
 
-本项目作者有权授权的代码、技能说明和文档采用 MIT License，详见本目录的 [LICENSE](LICENSE)。词库、第三方依赖、截图和示例讲义不因此被重新授权，具体说明见本目录的 [NOTICE](NOTICE)。
+本项目作者有权授权的代码、技能说明和文档采用 MIT License，详见本目录的 [LICENSE](LICENSE)。Wikidata 的结构化数据采用 CC0 1.0；第三方依赖、截图和示例讲义仍受各自许可约束，详见本目录的 [NOTICE](NOTICE)。

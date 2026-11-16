@@ -1,6 +1,6 @@
 # Academic Translation Skills
 
-**Version: V4.0.0** · [中文](README.md) | English
+**Version: V4.0.1** · [中文](README.md) | English
 
 This project turns English, French, and other foreign-language course materials into Chinese study notes. It preserves course structure, terminology, formulas, examples, and exercises, and can produce HTML, DOCX, or Markdown. The [Chinese README](README.md) is authoritative if the two versions differ.
 
@@ -29,7 +29,7 @@ Lite and Plus use the V3.1.3 monolithic workflow. Pro and Max each contain their
 
 Higher tiers may run more stages and checks, so processing can take longer. Download and use the tier that fits the material and review needs; you do not need to install all four.
 
-Download V4.0.0: [Lite](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-lite.zip) · [Plus](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-plus.zip) · [Pro](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-pro.zip) · [Max](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-max.zip) · [All tiers](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-all.zip).
+Download V4.0.1: [Lite](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-lite.zip) · [Plus](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-plus.zip) · [Pro](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-pro.zip) · [Max](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-max.zip) · [All tiers](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-all.zip).
 
 ## Install the tier you need
 
@@ -96,10 +96,10 @@ tests/       Project tests and synthetic prompt-injection cases
 assets/      Screenshots
 ```
 
-## License and glossary
+## License and terminology source
 
-Code, Skill instructions, and documentation that the project author is entitled to license are released under the [MIT License](LICENSE.en.md). Third-party dependencies, CSV glossaries, screenshots, and sample handouts remain subject to their own rights and licenses; see [NOTICE](skills/max/skills/translation-orchestrator/NOTICE).
+Code, Skill instructions, and documentation that the project author is entitled to license are released under the [MIT License](LICENSE.en.md). Terminology lookup uses the [public Wikidata data access API](https://www.wikidata.org/wiki/Wikidata:Data_access) by default. Wikidata structured data is released under [CC0 1.0](https://www.wikidata.org/wiki/Wikidata:Licensing) and may be freely used; API availability and usage policies follow Wikidata's current guidance. Third-party dependencies, screenshots, and sample handouts remain subject to their own rights and licenses; see [NOTICE](skills/max/skills/translation-orchestrator/NOTICE).
 
-The bundled CSV glossaries come from the National Academy for Educational Research in Taiwan, China; some entries have been selected or modified. They are translation references and do not represent the author's views in any field. The author supports the One-China principle. Under international law and other applicable provisions, all parties should respect the One-China principle.
+The four tier packages no longer include CSV terminology tables. Wikidata lookup is the default: only selected individual terms or short phrases are sent, never the handout. Results include multilingual candidates with links to their Wikidata items and must be checked against context. If no suitable match or Chinese label is available, or the service cannot be reached, the workflow falls back to contextual translation and reports the limitation. Choose `ai_auto` for terms that should not be sent to an external service.
 
-The project's release history is available on [GitHub Releases](https://github.com/Koloyaaa/academic-translation-skills/releases) and in the [changelog](CHANGELOG.md). V4.0.0 is the version described in this README; consult Releases for published packages.
+The project's release history is available on [GitHub Releases](https://github.com/Koloyaaa/academic-translation-skills/releases) and in the [changelog](CHANGELOG.md). V4.0.1 is the version described in this README; consult Releases for published packages.

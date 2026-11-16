@@ -1,6 +1,6 @@
 # Academic Translation Skills：外文讲义翻译
 
-**版本：V4.0.0**
+**版本：V4.0.1**
 
 [中文](README.md) | [English](README.en.md)
 
@@ -20,14 +20,14 @@
 
 四档各有独立的目录和入口。先选择一档，再安装该档所需的全部 Skill。
 
-| 档位 | 适用场景 | 工作方式 | V4.0.0 下载 |
+| 档位 | 适用场景 | 工作方式 | V4.0.1 下载 |
 | --- | --- | --- | --- |
-| [Lite](skills/lite/README.md) | 短小、结构简单的材料 | 使用旧版单体翻译流程，检查成品是否存在、非空且可读取。 | [Lite](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-lite.zip) |
-| [Plus](skills/plus/README.md) | 需要独立审计的普通讲义 | 使用旧版翻译流程，由独立质量审计 Skill 核对原文、译文和所选成品。无法完成审计时，不能报告审计通过。 | [Plus](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-plus.zip) |
-| [Pro](skills/pro/README.md) | 材料和输出需求各不相同的任务 | 包含完整新版技能组；每个 Skill 完成后，编排器根据结果和依赖决定下一步。 | [Pro](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-pro.zip) |
-| [Max](skills/max/README.md) | 希望使用现有完整新版流程的任务 | 包含完整新版技能组，按既有规则执行适用阶段。 | [Max](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-max.zip) |
+| [Lite](skills/lite/README.md) | 短小、结构简单的材料 | 使用旧版单体翻译流程，检查成品是否存在、非空且可读取。 | [Lite](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-lite.zip) |
+| [Plus](skills/plus/README.md) | 需要独立审计的普通讲义 | 使用旧版翻译流程，由独立质量审计 Skill 核对原文、译文和所选成品。无法完成审计时，不能报告审计通过。 | [Plus](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-plus.zip) |
+| [Pro](skills/pro/README.md) | 材料和输出需求各不相同的任务 | 包含完整新版技能组；每个 Skill 完成后，编排器根据结果和依赖决定下一步。 | [Pro](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-pro.zip) |
+| [Max](skills/max/README.md) | 希望使用现有完整新版流程的任务 | 包含完整新版技能组，按既有规则执行适用阶段。 | [Max](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-max.zip) |
 
-[下载四档全家桶](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.0/academic-translation-skills-v4.0.0-all.zip) · [查看 V4.0.0 发布说明](https://github.com/Koloyaaa/academic-translation-skills/releases/tag/v4.0.0)
+[下载四档全家桶](https://github.com/Koloyaaa/academic-translation-skills/releases/download/v4.0.1/academic-translation-skills-v4.0.1-all.zip) · [查看 V4.0.1 发布说明](https://github.com/Koloyaaa/academic-translation-skills/releases/tag/v4.0.1)
 
 通常情况下，档位越高，可能运行的环节和检查越多，处理时间也可能更长。请按材料复杂度和检查需求下载、使用所需档位；不需要把四档全部安装。
 
@@ -133,12 +133,12 @@ Pro 和 Max 支持 PDF、PPTX、DOCX、TXT 和纯文本。处理 PDF/PPTX 时，
 
 每个 Skill 的 `SKILL.md` 包含入口说明。`skill.yaml` 是项目的可选参数扩展，不属于 Agent Skills 标准字段。
 
-## 许可与词库
+## 许可与术语来源
 
-本项目作者有权授权的代码、技能说明及文档采用 MIT License，详见 [LICENSE](LICENSE)。CSV 词库、第三方 Python 依赖、示例图片和讲义仍受各自权利和许可约束，详见 [NOTICE](skills/max/skills/translation-orchestrator/NOTICE)。
+本项目作者有权授权的代码、技能说明及文档采用 MIT License，详见 [LICENSE](LICENSE)。术语查询默认通过 [Wikidata](https://www.wikidata.org/) 的[公开数据访问 API](https://www.wikidata.org/wiki/Wikidata:Data_access) 在线完成。Wikidata 结构化数据以 [CC0 1.0](https://www.wikidata.org/wiki/Wikidata:Licensing) 发布，可自由使用；API 的可用性和使用政策以 Wikidata 当前说明为准。第三方 Python 依赖、示例图片和讲义仍受各自权利和许可约束，详见 [NOTICE](skills/max/skills/translation-orchestrator/NOTICE)。
 
-随包 CSV 词库来源于中华人民共和国台湾省教育研究院乐词网，部分词条经过筛选或修改。词条只供翻译参考，不代表项目作者在任何领域的观点。项目作者支持一个中国原则。根据国际法等相关法律规定，各方均应尊重一个中国原则。
+四个档位不再随包附带 CSV 术语库，默认通过 Wikidata 查询术语。每次只向 Wikidata 发送挑选出的单个术语或短语，不会发送整份讲义；返回的多语种候选附有 Wikidata 条目链接，需结合上下文判断。没有合适匹配、缺少中文标签或网络不可用时，技能会改用上下文翻译并说明查询限制。对不适合发送到外部服务的术语，可选择 `ai_auto`。
 
 ## 版本发布
 
-[V4.0.0 下载与发布说明](https://github.com/Koloyaaa/academic-translation-skills/releases/tag/v4.0.0)；详细历史见 [CHANGELOG](CHANGELOG.md)。
+[V4.0.1 下载与发布说明](https://github.com/Koloyaaa/academic-translation-skills/releases/tag/v4.0.1)；详细历史见 [CHANGELOG](CHANGELOG.md)。

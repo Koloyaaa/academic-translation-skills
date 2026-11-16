@@ -4,4 +4,4 @@ Foreign Academic Translator Skill - Scripts Package
 """
 
 __version__ = "1.0.0"
-__all__ = ["text_extractor", "glossary_loader", "builder", "utils"]
+__all__ = ["text_extractor", "wikidata_lookup", "builder", "utils"]

@@ -52,9 +52,9 @@ parameters:
 
   - name: glossary_mode
     type: string
-    description: "词库使用方式（system_glossary 用系统词库 / ai_auto 由 AI 自动识别术语）"
+    description: "默认 wikidata 在线查询候选；ai_auto 由 AI 结合上下文识别且不调用外部 API。Wikidata 仅接收被选中的术语"
     required: true
-    enum: ["system_glossary", "ai_auto"]
+    enum: ["wikidata", "ai_auto"]
 
   - name: quiz_levels
     type: array

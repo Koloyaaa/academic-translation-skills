@@ -24,16 +24,13 @@ class WorkflowStateDependencyTests(unittest.TestCase):
         self._write(self.runtime / "references" / "task-handoff.md", "handoff rules")
         for relative in workflow_state.CONTENT_RUNTIME_FILES:
             self._write(self.runtime / relative, relative)
-        self._write(self.runtime / "scripts" / "term_catcher.py", "term catcher")
-        self._write(self.runtime / "scripts" / "glossary_loader.py", "glossary loader")
+        self._write(self.runtime / "scripts" / "wikidata_lookup.py", "Wikidata lookup")
         self._write(self.runtime / "scripts" / "image_extractor.py", "image extractor")
         self._write(self.runtime / "scripts" / "workflow_state.py", "cache fingerprint logic")
         self._write(self.runtime / "scripts" / "builder.py", "builder entry")
         self._write(self.runtime / "scripts" / "builders" / "__init__.py", "builder package")
         self._write(self.runtime / "scripts" / "builders" / "html_builder.py", "html builder")
         self._write(self.runtime / "templates" / "html_style.css", "body { color: black; }")
-        self._write(self.runtime / "glossaries" / "Science" / "terms.csv", "source_term,target_term\nalpha,阿尔法\n")
-        self._write(self.runtime / "glossaries" / "Agriculture" / "terms.csv", "source_term,target_term\ncrop,作物\n")
         for skill in (
             "foreign-academic-pdf-reader",
             "foreign-academic-pptx-reader",
@@ -51,7 +48,7 @@ class WorkflowStateDependencyTests(unittest.TestCase):
             "project_root": str(self.root),
             "shared_runtime": str(self.runtime),
             "source_file": str(self.source),
-            "glossary_mode": "system_glossary",
+            "glossary_mode": "wikidata",
             "discipline": "Science",
             "include_images": False,
         }
@@ -76,7 +73,7 @@ class WorkflowStateDependencyTests(unittest.TestCase):
         )
         return workflow_state.build_signature(stage, "1", config, fingerprints)
 
-    def test_translation_signature_tracks_selected_skill_and_glossary(self):
+    def test_translation_signature_tracks_selected_skill_and_wikidata_lookup(self):
         first = self.signature("translate", "glossary_mode,discipline,include_images")
 
         with (self.root / "skills" / "foreign-academic-lesson-translator" / "SKILL.md").open("a", encoding="utf-8") as stream:
@@ -84,21 +81,16 @@ class WorkflowStateDependencyTests(unittest.TestCase):
         after_skill_change = self.signature("translate", "glossary_mode,discipline,include_images")
         self.assertNotEqual(first, after_skill_change)
 
-        with (self.runtime / "glossaries" / "Science" / "terms.csv").open("a", encoding="utf-8") as stream:
-            stream.write("beta,贝塔\n")
-        after_selected_glossary_change = self.signature("translate", "glossary_mode,discipline,include_images")
-        self.assertNotEqual(after_skill_change, after_selected_glossary_change)
+        with (self.runtime / "scripts" / "wikidata_lookup.py").open("a", encoding="utf-8") as stream:
+            stream.write("\n# lookup behavior changed")
+        after_lookup_change = self.signature("translate", "glossary_mode,discipline,include_images")
+        self.assertNotEqual(after_skill_change, after_lookup_change)
 
-        with (self.runtime / "glossaries" / "Agriculture" / "terms.csv").open("a", encoding="utf-8") as stream:
-            stream.write("farm,农场\n")
-        after_unselected_glossary_change = self.signature("translate", "glossary_mode,discipline,include_images")
-        self.assertEqual(after_selected_glossary_change, after_unselected_glossary_change)
-
-    def test_ai_auto_does_not_depend_on_system_glossary_files(self):
+    def test_ai_auto_does_not_depend_on_wikidata_lookup_script(self):
         task = {**self.task, "glossary_mode": "ai_auto"}
         before = self.signature("translate", "glossary_mode,discipline,include_images", task)
-        with (self.runtime / "glossaries" / "Science" / "terms.csv").open("a", encoding="utf-8") as stream:
-            stream.write("gamma,伽马\n")
+        with (self.runtime / "scripts" / "wikidata_lookup.py").open("a", encoding="utf-8") as stream:
+            stream.write("\n# lookup behavior changed")
         after = self.signature("translate", "glossary_mode,discipline,include_images", task)
         self.assertEqual(before, after)
 

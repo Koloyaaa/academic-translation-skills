@@ -265,8 +265,6 @@ def _stage_distributions(stage: str, task: dict[str, Any], config: dict[str, Any
     if stage in {"translate", "quiz", "audit_translation", "audit_quiz"}:
         packages.append("chardet")
         packages.extend({".pdf": ["pdfplumber", "pypdf"], ".docx": ["python-docx"], ".txt": ["chardet"]}.get(suffix, []))
-    if stage == "translate" and str(config.get("glossary_mode", "")).strip().lower() == "system_glossary":
-        packages.append("chardet")
     if stage == "translate" and is_enabled(config.get("include_images")) and suffix == ".pdf":
         packages.extend(("pdfplumber", "pypdf", "Pillow"))
     if stage == "parse_pptx":
@@ -436,11 +434,9 @@ def stage_dependency_paths(task: dict[str, Any], stage: str, config: dict[str, A
         dependencies.extend(sibling_root / skill for skill in stage_skill_names(stage, task))
 
     if stage == "translate":
-        if str(config.get("glossary_mode", "")).strip().lower() == "system_glossary":
-            dependencies.extend((runtime / "scripts" / "term_catcher.py", runtime / "scripts" / "glossary_loader.py"))
-            discipline = config.get("discipline")
-            if discipline:
-                dependencies.append(runtime / "glossaries" / str(discipline))
+        glossary_mode = str(config.get("glossary_mode", "wikidata")).strip().lower() or "wikidata"
+        if glossary_mode in {"wikidata", "system_glossary"}:
+            dependencies.append(runtime / "scripts" / "wikidata_lookup.py")
     if stage == "translate" and is_enabled(config.get("include_images")):
         for key in ("image_dir", "placement_file"):
             asset_path = resolve_task_path(task, key)

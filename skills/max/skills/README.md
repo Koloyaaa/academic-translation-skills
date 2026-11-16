@@ -22,7 +22,7 @@ Max 套件由十一个可独立发现的 Agent Skills 组成。`translation-orch
 | foreign-academic-docx-publisher | 将统一 Markdown 发布为 DOCX 并检查文档结构 | 用户选择 DOCX 且该格式缓存未命中 |
 | foreign-academic-quality-auditor | 对照源文、PDF/PPTX 页图和题目审计忠实度、完整性与来源标记 | 对应语义审计缓存未命中 |
 
-十个执行 Skill 与编排 Skill 必须安装在同一个 Skills 根目录下，且保持同级。脚本、词库、模板和共享 Python 依赖统一放在 `translation-orchestrator` 目录中；PDF/PPTX Reader 各自带专属提取脚本。安装方法见[项目首页](../README.md)和[套件安装说明](translation-orchestrator/README.md)。
+十个执行 Skill 与编排 Skill 必须安装在同一个 Skills 根目录下，且保持同级。脚本、Wikidata 在线术语查询工具、模板和共享 Python 依赖统一放在 `translation-orchestrator` 目录中；PDF/PPTX Reader 各自带专属提取脚本。安装方法见[项目首页](../README.md)和[套件安装说明](translation-orchestrator/README.md)。
 
 ## 工作流
 

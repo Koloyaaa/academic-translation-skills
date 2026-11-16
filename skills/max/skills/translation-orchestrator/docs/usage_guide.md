@@ -32,14 +32,14 @@
 | 参数 | 可选值 | 说明 |
 | --- | --- | --- |
 | `source_text` | 若宿主支持则由预处理注入 | 否则从用户附加的源文件读取；Agent Skills 标准本身不定义参数注入 |
-| `discipline` | `Engineering`、`Economics`、`Science`、`Agriculture`、`Social_Sciences`、`Literature_Arts`、`Medicine` | 从当前讲义推断，用于筛选相关术语表；无法可靠判断时询问 |
+| `discipline` | `Engineering`、`Economics`、`Science`、`Agriculture`、`Social_Sciences`、`Literature_Arts`、`Medicine` | 从当前讲义推断，用于术语语境判断；无法可靠判断时询问 |
 | `source_language` | 当前讲义正文的主要语言 | 自动识别；用于“学案所属语言”测验选项 |
 | `output_formats` | `html`、`docx`、`md` | 可多选，至少选择一种 |
 | `layout` | `translation_only`、`translation_first`、`source_first`、`concept_highlight` | 仅译文、译文在前、原文在前或术语标注原文 |
 | `show_concept_table` | `true` / `false` | 是否在文末生成重要术语概念汇总表 |
 | `annotate_level` | `无注释`、`轻度注释`、`高中生视角`、`重度注释` | 注释越多，译文越长 |
 | `include_images` | `true` / `false` | 插入 PDF/PPTX Reader 经过视觉核对并选中的图片；若宿主无图像输入，则不导出图片并在成品说明 |
-| `glossary_mode` | `system_glossary` / `ai_auto` | 使用随包词库，或由模型结合上下文识别术语 |
+| `glossary_mode` | `wikidata` / `ai_auto` | 默认在线查询 Wikidata 候选；`ai_auto` 由模型结合上下文识别术语，不调用外部 API |
 | `quiz_levels` | `无测验`、`基础`、`中档`、`高难` | 单独询问，可多选；会额外消耗 token；无测验覆盖同题其他选择 |
 | `quiz_language` | `双语`、`学案所属语言`、`中文` | 选择“学案所属语言”时，使用当前讲义识别出的源语言 |
 | `reuse_preferences` | `沿用上次参数` / `重新选择` | 仅当项目已有偏好文件且本次没有直接指定参数时询问 |
@@ -53,7 +53,7 @@
 
 ## 术语与注释
 
-选择 `system_glossary` 时，技能会根据学科和词表文件名检索相关 CSV，并优先采用查到的译名；没有匹配结果时结合上下文翻译。整个学科词库由 `glossary_loader.py` 按文件名排序后合并，冲突时保留排序靠前词表的译名并报告。选择 `ai_auto` 时不查询随包词库。标注术语时保留原文里的原词，法语术语不会改写成英文。
+默认使用 `wikidata` 时，技能通过共享脚本查询 Wikidata 的多语种实体标签，每批最多十个单独术语；请求只包含术语或短语，不会发送整句或讲义。Wikidata 的结构化数据按 CC0 1.0 发布，公开 API 按当前使用政策提供。它不是学科规范词典，返回候选需结合上下文判断，不得直接采用第一条。未找到合适候选、缺少中文标签、结果有歧义或网络不可用时，按上下文翻译并说明限制。用户选择 `ai_auto` 时不调用外部 API。无论采用哪种方式，标注术语时均保留源文中的原词，法语术语不会改写成英文。
 
 开启概念表后，技能会按术语在译文中首次出现的顺序整理外文术语、中文译名和简短释义。中文注释分为无、轻度、高中生视角和重度四档；注释主要用于解释定义、公式思路和易错点。
 
@@ -85,7 +85,7 @@ PDF 提取文本中的每页页码和块坐标用于图片落位；即使某页�
 
 ### 找不到术语
 
-检查 `glossaries/` 中是否存在对应学科目录和相关 CSV 文件。也可以将术语策略改为 `ai_auto`，让模型按上下文翻译。
+确认网络可访问 Wikidata；检查查询脚本是否返回 `NOT_FOUND`、`UNAVAILABLE` 或缺少中文标签。候选不能确认时，结合上下文翻译；若术语不应发送到外部服务，可将策略改为 `ai_auto`。
 
 ### DOCX 或 HTML 未生成
 

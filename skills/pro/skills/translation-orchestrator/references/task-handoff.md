@@ -22,7 +22,7 @@
 - `shared_runtime`：安装后的 `translation-orchestrator` 共享资源目录绝对路径，由编排 Skill 根据自身所在 Skills 根目录解析；不得假定技能安装在项目内。
 - `discipline`、`source_language`：本轮识别结果；不写入偏好文件。
 - `output_formats`：仅包含本轮选择的格式。
-- `layout`、`show_concept_table`、`annotate_level`、`include_images`、`glossary_mode`：本轮确认值。
+- `layout`、`show_concept_table`、`annotate_level`、`include_images`、`glossary_mode`：本轮确认值。术语策略缺省为 `wikidata`；旧值 `system_glossary` 读取时按 `wikidata` 处理，用户明确选择 `ai_auto` 时不查询外部服务。
 - `quiz_levels`、`quiz_language`：本轮确认值；无测验时 `quiz_levels` 为空数组、`quiz_language` 为空值。
 - `image_dir`、`placement_file`：仅在用户启用配图且 `vision_capability=available` 时传给 Reader；无图像能力时不要传入，不能导出未经核准的图片。
 - `state_file`：`.translation-state-pro.json` 的绝对路径；仅用于 Pro 阶段检查点和决策事件，不含正文。
@@ -71,7 +71,7 @@ PPTX 任务另含以下字段：
 
 ## 阶段签名与缓存
 
-阶段输入与已完成输出用 `shared_runtime/scripts/workflow_state.py` 记录。开始阶段时先检查持久 cache state，再检查本轮 state；仅当输入、相关设置、资源和成品哈希匹配时复用。状态脚本会将自身、编排器 `SKILL.md`、本交接文件、当前阶段 Skill 整个目录、相关脚本、模板、词库及影响阶段的运行库版本纳入签名。HTML 发布还会签入 output 文件树中其他 HTML 文件的相对路径。
+阶段输入与已完成输出用 `shared_runtime/scripts/workflow_state.py` 记录。开始阶段时先检查持久 cache state，再检查本轮 state；仅当输入、相关设置、资源和成品哈希匹配时复用。状态脚本会将自身、编排器 `SKILL.md`、本交接文件、当前阶段 Skill 整个目录、相关脚本、模板、Wikidata 查询脚本及影响阶段的运行库版本纳入签名。HTML 发布还会签入 output 文件树中其他 HTML 文件的相对路径。
 
 PDF/PPTX 的结构清单、原文文本、渲染页和视觉识别中间数据可能包含课程原文，因此只能保存在本轮工作区，**不得复制到 `.translator-cache-pro/`**。PDF/PPTX 的 `parse_*`、`review_*`、`explain_*` 只写 `.translation-state-pro.json` 的路径与哈希检查点；成功交付后清理这些中间件。processing fingerprint 是摘要，可用于持久缓存签名。正式图片只在用户启用 `include_images` 且 Reader 核对后明确选择时写入 `output_dir/images` 并登记到 `placement_file`。
 
@@ -83,7 +83,7 @@ PDF/PPTX 的结构清单、原文文本、渲染页和视觉识别中间数据�
 | `parse_pptx` | 原件 | `vision_capability`、能力证据、`include_images`、`include_speaker_notes`、OCR 语言、Reader 版本、渲染器与运行库版本 | 本轮结构提取、图片导出和页面渲染；无图像能力时禁止导出正式图片；仅写任务状态 |
 | `review_pptx` | 原始 manifest、可见页渲染图 | `vision_capability`、能力证据、`vision_model_id`、Reader 版本 | 有图像输入时必须逐页核对；无图像输入时记录 `SKIPPED_NO_VISION` 并继续文本路线；仅写任务状态 |
 | `explain_pptx` | 最终 manifest、候选页渲染图 | `vision_capability`、能力证据、`vision_model_id`、Explainer 版本 | 仅有图像输入且存在候选页时执行；无候选或无图像输入时跳过并保留原因 |
-| `translate` | 原件及 PDF/PPTX 处理摘要 | 路线、学科、语言、布局、概念表、注释、图片、词库、cache_dir、所选翻译 Skill 版本 | 正文译稿与覆盖索引；不含格式和测验 |
+| `translate` | 原件及 PDF/PPTX 处理摘要 | 路线、学科、语言、布局、概念表、注释、图片、术语来源、cache_dir、所选翻译 Skill 版本 | 正文译稿与覆盖索引；不含格式和测验 |
 | `quiz` | 原件及 PDF/PPTX 处理摘要 | 难度、语言、源语言、出题/解析版本 | 已核验测验片段 |
 | `audit_translation` | 原件、缓存正文 Markdown、coverage index 和 PDF/PPTX 处理摘要 | 正文翻译设置、cache_dir、审计版本 | 正文语义门禁；测验变化不触发正文重审 |
 | `audit_quiz` | 原件、缓存测验片段和 PDF/PPTX 处理摘要 | 测验设置、cache_dir、出题/解析版本、审计版本 | 仅测验源文依据与答案解析门禁 |

@@ -7,7 +7,7 @@
 
 ## 安装与调用
 
-将 `skills/` 下的两个 Skill 文件夹都复制到所用宿主的技能目录，例如 Codex 项目的 `.agents/skills/`。保留各自整个文件夹，以便脚本、词库、模板和审计说明都能通过相对路径找到。通过 `foreign-academic-translator-plus` 启动翻译；宿主需要能提供独立审阅上下文，并在其中运行 `foreign-academic-quality-auditor-plus` 质量审计 Skill。
+将 `skills/` 下的两个 Skill 文件夹都复制到所用宿主的技能目录，例如 Codex 项目的 `.agents/skills/`。保留各自整个文件夹，以便脚本、模板和审计说明都能通过相对路径找到。默认通过 Wikidata 公开 API 在线查询术语；其结构化数据采用 CC0 1.0。查询只发送单个术语或短语。通过 `foreign-academic-translator-plus` 启动翻译；宿主需要能提供独立审阅上下文，并在其中运行 `foreign-academic-quality-auditor-plus` 质量审计 Skill。
 
 如果宿主不能在独立上下文中运行质量审计 Skill，Plus 入口会把任务标记为 `BLOCKED` 或 `FAIL`，不会把作者自检包装为审计通过。该 Skill 必须直接读取完整源文、译文核心 Markdown 和每个用户选择的成品。图像未能实际查看时标记为 `PARTIAL_TEXT_ONLY`，不能称 Plus 整体审计通过。
 

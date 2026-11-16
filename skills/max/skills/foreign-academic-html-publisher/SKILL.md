@@ -12,7 +12,7 @@ license: MIT
 
 # HTML 发布 Skill
 
-读取 .translation-task.json 和 translated_markdown。只负责 HTML 构建和成品检查；不得重新翻译、删减、重排或改写正文，也不读取或保存偏好。共享脚本、CSS、词库和图片资源位于清单的 shared_runtime。
+读取 .translation-task.json 和 translated_markdown。只负责 HTML 构建和成品检查；不得重新翻译、删减、重排或改写正文，也不读取或保存偏好。共享脚本、CSS、Wikidata 查询工具和图片资源位于清单的 shared_runtime。
 
 ## 构建
 
